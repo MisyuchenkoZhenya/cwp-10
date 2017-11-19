@@ -23,6 +23,9 @@ class Film {
         for(let elem in this.film){
             if(!this.film[elem]) return false;
         }
+        if( this.film.year < 1895 ||
+            this.film.budget < 0 || 
+            this.film.gross < 0) return false;
         return true;
     }
 }

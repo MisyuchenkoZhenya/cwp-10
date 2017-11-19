@@ -1,5 +1,3 @@
-
-
 module.exports = {
     "sortByField": (array, field) => {
         let newArray = array.sort((a, b) => { 

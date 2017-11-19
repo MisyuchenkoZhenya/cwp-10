@@ -1,7 +1,8 @@
 const JH = require('../helpers/json_helper');
 const jsonPath = `./top250.json`;
-const Film = require('../models/films');
-const sorting = require('../helpers/sorting')
+const Film = require('../models/film');
+const sorting = require('../helpers/sorting');
+const fs = require('fs');
 
 let films = JH.loadJson(jsonPath);
 
@@ -26,6 +27,7 @@ module.exports = (app) => {
             if(!film.isValid()) throw new Error;
             films.push(film.get());
             sorting.sortByField(films, "position");
+            fs.writeFileSync(jsonPath, films);
             res.send(film);
         }
         catch(Error){
@@ -42,6 +44,7 @@ module.exports = (app) => {
             }
             sorting.sortByField(films, "position");
             correctPositions(0);
+            fs.writeFileSync(jsonPath, films);
             res.send("Updating completed successfully");
         }
         catch(Error){
@@ -53,6 +56,7 @@ module.exports = (app) => {
             let index = findById(Number(req.body.id));
             films.splice(index, 1);
             correctPositions(index);
+            fs.writeFileSync(jsonPath, films);
             res.send("Removing completed successfully");
         }
         catch(Error){
@@ -64,7 +68,7 @@ module.exports = (app) => {
 function getRightPosition() {
     let pos = -1;
     for(let i = 0; i < films.length; i++){
-        if(films[i].position !== i + 1) { 
+        if(films[i].position !== i + 1) {
             pos = i + 1;
             break;
         }

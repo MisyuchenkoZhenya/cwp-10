@@ -8,8 +8,6 @@ const port = 3000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//TODO: writeFile for top250.json
-
 routes(app);
 
 app.listen(port, () => {
