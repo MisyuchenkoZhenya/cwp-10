@@ -1,38 +1,30 @@
 const JH = require('../helpers/json_helper');
+const uid = require('uid');
 
-class Films {
-    constructor(path) {
-        this.films = loadData(path);
+class Film {
+    constructor(film) {
+        this.film = {
+            "id": uid(5),
+            "title": film.title,
+            "rating": film.rating,
+            "year": Number(film.year),
+            "budget": Number(film.budget),
+            "gross": Number(film.gross),
+            "poster": film.poster,
+            "position": Number(film.position),
+        }
     }
 
-    loadData(path) {
-        JH.loadJson(path)
-            .then(result => {
-                return result;
-            })
-            .catch(error => {
-                console.log(error.message);
-            });
-    }
- 
-    add(){
-
-    }
-
-    get(){
+    get() {
         return this.film;
+    }
+
+    isValid() {
+        for(let elem in this.film){
+            if(!this.film[elem]) return false;
+        }
+        return true;
     }
 }
 
-module.exports = Films;
-
-// this.film = {
-//     "id": film.id,
-//     "title": film.title,
-//     "rating": film.rating,
-//     "year": film.year,
-//     "budget": film.budget,
-//     "gross": film.gross,
-//     "poster": film.poster,
-//     "position": film.position,
-// }
+module.exports = Film;
