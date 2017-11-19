@@ -12,9 +12,9 @@ module.exports = (app) => {
     });
     app.get('/api/films/read', (req, res) => {
         try{
-            let id = Number(req.query.id);
-            if(!id) throw new Error;
-            res.send(films[id - 1]);
+            let index = findById(req.query.id);
+            console.log(index);
+            res.send(films[index]);
         }
         catch(Error){
             res.send("Wrong parameters");
@@ -27,7 +27,7 @@ module.exports = (app) => {
             if(!film.isValid()) throw new Error;
             films.push(film.get());
             sorting.sortByField(films, "position");
-            fs.writeFileSync(jsonPath, films);
+            fs.writeFileSync(jsonPath, JSON.stringify(films));
             res.send(film);
         }
         catch(Error){
@@ -36,7 +36,7 @@ module.exports = (app) => {
     });
     app.post('/api/films/update', (req, res) => {
         try{
-            let index = findById(Number(req.body.id));
+            let index = findById(req.body.id);
             for(let field in req.body){
                 if(field in films[index]){
                     films[index][field] = req.body[field];
@@ -44,7 +44,7 @@ module.exports = (app) => {
             }
             sorting.sortByField(films, "position");
             correctPositions(0);
-            fs.writeFileSync(jsonPath, films);
+            fs.writeFileSync(jsonPath, JSON.stringify(films));
             res.send("Updating completed successfully");
         }
         catch(Error){
@@ -53,10 +53,10 @@ module.exports = (app) => {
     });
     app.post('/api/films/delete', (req, res) => {
         try{
-            let index = findById(Number(req.body.id));
+            let index = findById(req.body.id);
             films.splice(index, 1);
             correctPositions(index);
-            fs.writeFileSync(jsonPath, films);
+            fs.writeFileSync(jsonPath, JSON.stringify(films));
             res.send("Removing completed successfully");
         }
         catch(Error){
