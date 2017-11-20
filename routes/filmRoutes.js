@@ -13,7 +13,6 @@ module.exports = (app) => {
     app.get('/api/films/read', (req, res) => {
         try{
             let index = findById(req.query.id);
-            console.log(index);
             res.send(films[index]);
         }
         catch(Error){
